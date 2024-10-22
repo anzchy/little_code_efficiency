@@ -1,7 +1,3 @@
-# use mlx framework developed by Apple, to make the best use of Mac M series chip to perform the transcription.
-# Feature: audio chunking, memory management, prompting, when transcribing it will indicates the progress.
-# 
-
 import os
 import logging
 import signal
@@ -16,13 +12,12 @@ from tqdm import tqdm
 logging.basicConfig(filename='transcription_process.log', level=logging.INFO)
 
 # Set up the MLX Whisper model
-# the models are base_fp32, tiny_fp32, small_fp16, but when using fp16, you should specify in the below.
-model_path = "mlx_models/base_fp32"
+model_path = "mlx_models/base_fp32" # use small_fp32 可能导致内存不足
 logging.info(f"Using model: {model_path}")
 
 # Audio chunking parameters
 CHUNK_LENGTH_MS = 60000  # 1 minute per chunk
-OVERLAP_MS = 5000  # 5 seconds overlap
+OVERLAP_MS = 500  # 0.5 seconds overlap
 
 # Set timeout for processing each chunk (in seconds)
 CHUNK_TIMEOUT = 120
@@ -41,9 +36,9 @@ def handler(signum, frame):
 
 signal.signal(signal.SIGALRM, handler)
 
-# Hard-coded output format and initial prompt, you can change 
-output_format = ".txt" # or ".md", ".srt"
-initial_prompt = "以下是英语练习的句子，关键词有英语，人工智能。" 
+# Hard-coded output format and initial prompt
+output_format = ".txt" # ".txt" or ".srt" or ".md" or 
+initial_prompt = "以下是英语练习的句子，关键词有英语，人工智能。"
 
 # Prompt user for language
 language ='zh' # e.g., 'zh' for Chinese, 'en' for English
